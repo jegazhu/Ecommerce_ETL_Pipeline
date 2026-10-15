@@ -8,6 +8,20 @@
 An end-to-end, production-grade cloud data engineering portfolio project demonstrating a **Medallion Architecture (Bronze $\rightarrow$ Silver $\rightarrow$ Gold)** implemented on Databricks. This project features automated orchestration, rigorous data quality governance, and an enterprise hybrid bridge that syncs cloud lakehouse models directly into local SQL Server Management Studio (SSMS) via native ODBC.
 
 ---
+📂 Repository Structure
+```text
+ecommerce-databricks-lakehouse/
+├── notebooks/
+│   ├── Ecommerce_ETL_Pipeline.py         # Main orchestration pipeline
+│   ├── 02_silver_limpieza.py             # Silver-tier cleansing & wrangling
+│   ├── 03_gold_agregaciones.py           # Gold-tier business metric rollups
+│   ├── 04_data_quality_gates.py          # Automated data quality assertions
+│   ├── 05_agentic_bi_validator.py        # Automated analytical readiness checks
+│   └── 06_streaming_iot_telemetry.py     # Real-time telemetry simulation
+├── sql/
+│   └── sp_Sync_Databricks_Ventas.sql     # Local SSMS staging & sync procedure
+└── README.md
+```
 
 ## 🏗️ Architectural Overview
 
@@ -30,3 +44,39 @@ An end-to-end, production-grade cloud data engineering portfolio project demonst
                                                 ▼
                                        [ Local SSMS Enterprise DB ]
                                        (sp_Sync_Databricks_Ventas)
+```
+⚡ Databricks Features & Technical Implementation
+
+# Serverless Compute & Databricks Jobs Orchestration:
+* Utilizes Databricks Serverless compute infrastructure for rapid, zero-config spark execution.
+* Multi-stage pipeline orchestrated via automated workflow jobs executing raw ingestion, cleaning, and aggregation layers in under 90 seconds.
+
+# Medallion Lakehouse Paradigm (Delta Lake):
+* Bronze Layer: Immutable capture of raw e-commerce transaction logs and synthetic telemetry generated via Python Faker routines.
+* Silver Layer (02_silver_limpieza.py): Automated schema enforcement, data type casting, and null-value sanitization.
+* Gold Layer (03_gold_agregaciones.py): High-performance business metric rollups generating gold_ventas_por_mes (tracking monthly total sales, order counts, average ticket size, and active selling days).
+
+# Data Quality & Governance (`04_data_quality_gates.py` & `05_agentic_bi_validator.py`):
+* Programmatic assertion checks and threshold guardrails blocking corrupt or malformed records from hitting downstream consumption layers.
+
+# Hybrid Enterprise Bridge (Databricks $\rightarrow$ Local SSMS):
+* Solved cloud-to-on-premise data friction by configuring the native Databricks ODBC driver via a Windows System DSN with Token authentication (`UID=token`).
+* Engineered a robust T-SQL staging procedure utilizing temporary table interception to safely pull cloud Gold tables directly into local SSMS databases for localized enterprise reporting.
+
+📊 # Sample Gold Dataset Schema (gold_ventas_por_mes)
+
+| Column Name | Data Type | Description |
+| --- | --- | --- |
+| anio |INT | Calendar Year |
+| mes | INT | Calendar Month | 
+| ventas_totales | DECIMAL(18,2) | Total gross revenue aggregated per month
+| numero_pedidos | INT | Total order volume | 
+| ticket_promedio | DECIMAL(18,2) | Average order value (AOV) | 
+| dias_activos | INT | Total active trading days in the month | 
+| synced_at | DATETIME | Timestamp of hybrid cloud-to-local synchronization |
+
+🛠️ #Tech Stack
+* Cloud & Lakehouse: Databricks, Delta Lake, Apache Spark, Serverless SQL Warehouses
+* Languages & Libraries: Python, PySpark, Pandas, SQL
+* Data Integration: ODBC Driver, Windows System DSN, T-SQL, Stored Procedures
+* Version Control: Git, GitHub
