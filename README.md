@@ -75,6 +75,16 @@ ecommerce-databricks-lakehouse/
 | dias_activos | INT | Total active trading days in the month | 
 | synced_at | DATETIME | Timestamp of hybrid cloud-to-local synchronization |
 
+## 🌐 Hybrid Cloud-to-Local Integration Architecture
+
+To bridge cloud lakehouse storage with on-premise enterprise reporting, this project implements a secure hybrid pipeline between Databricks and SQL Server Management Studio (SSMS):
+
+* **Linked Server Configuration:** Configured a dedicated Linked Server (`DATABRICKSLAKEHOUSE2`) using the native ODBC driver.
+* **Optimized Pass-Through Queries:** Utilized `OPENROWSET` with `PrepareMethod=0` to bypass OLE DB provider schema preparation limits, enabling direct remote table inspection and high-speed row-count audits.
+* **Synergy Impact:** Combines Databricks serverless compute (for heavy Spark ETL and Medallion transformations) with local SSMS reporting capability—allowing a seamless back-and-forth workflow across cloud and on-premise data stacks.
+
+<img width="1324" height="570" alt="Screenshot 2026-10-15 185859" src="https://github.com/user-attachments/assets/d29fb7b7-3c28-4c6a-8111-ba694588e97e" />
+
 🛠️ #Tech Stack
 * Cloud & Lakehouse: Databricks, Delta Lake, Apache Spark, Serverless SQL Warehouses
 * Languages & Libraries: Python, PySpark, Pandas, SQL
